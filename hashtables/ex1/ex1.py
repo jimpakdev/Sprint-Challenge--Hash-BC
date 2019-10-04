@@ -12,10 +12,13 @@ def get_indices_of_item_weights(weights, length, limit):
     # store weights in hashtable as keys
     # return instance of an Answer tuple (zero, one) or None
     for weight in weights:
-        hash_table_insert(ht, weight, weights[weight])
+        hash_table_insert(ht, weights[weight], weight)
 
-    if (limit - weight) in ht.storage:
-        return ( weight, (limit-weight) )
+    # test each weight with ( limit - weight )
+    # if ( limit - weight ) is in our hashtable, we have found a pair that adds up to the limit
+    for i in range(length):
+        if (limit - weights[i].key) in ht.storage.keys():
+            return ( weights[i].key, ht.storage[(limit - weights[i].key)].key )
 
     return None
 
