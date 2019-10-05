@@ -28,15 +28,17 @@ def proof_of_work(last_proof):
     print("Searching for next proof")
     proof = 0
 
-    last = json.dumps(last_proof)
-
     # check if last six chars of hash(p) = first six chars of hash(p')
+
+    # jsondumps() v.s. str()
+    last = str(last_proof)
     last_hash = hashlib.sha256(last.encode()).hexdigest()
 
     while valid_proof(last_hash, proof) is False:
         proof += 1
-        print(proof)
     
+    print(last_hash)
+    print( hashlib.sha256(str(proof).encode()).hexdigest() )
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
@@ -52,11 +54,12 @@ def valid_proof(last_hash, proof):
     # get the old hash
     # get the hash of the provided proof
 
-    string_proof = json.dumps(proof)
+    string_proof = str(proof)
 
     new_hash = hashlib.sha256(string_proof.encode()).hexdigest()
 
-    return last_hash[:6] == new_hash[6:]
+
+    return last_hash[-6:] == new_hash[:6]
 
 
 if __name__ == '__main__':
